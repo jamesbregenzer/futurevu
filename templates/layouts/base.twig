@@ -1,0 +1,59 @@
+{% set gtmcode = theme_mods.gtmcode | default('GTM-MH87FL') %}
+{% set vu_close_body_tag_content = vu_close_body_tag_section %}
+{% set vu_close_head_tag_content = vu_close_head_tag_section %}
+
+{% block html_head_container %}
+{% include '@templates/partial/html-header.twig' %}
+    {% block head %}
+    {% endblock %}
+
+    {% if vu_close_head_tag_content %}
+        {{ vu_close_head_tag_content }}
+    {% endif %}
+    </head>
+{% endblock %}
+
+    <body
+        class="{{ bodyClass }} {% if user %}wp-user{% endif %}"
+        
+    >
+        {% if gtmcode != '' %}
+        <!-- Google Tag Manager -->
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ gtmcode }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        {% endif %}
+
+        {% include "@templates/includes/site-grid.twig" %}
+        {% include "@templates/includes/svgs.twig" %}
+
+        <div class="site-content">
+            {% if alertBar %}
+                {% include "@components/alert-bar.twig" with {
+                    text: '
+                        <p><!-- ALERT TEXT --></p>
+                    '
+                } %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            {% if footer %}
+                {% include "@components/site-footer.twig" with {
+                    style: footer
+                } %}
+            {% endif %}
+        </div>
+
+     {% if theme_mods.child_navigation %}
+       <div id="overlay"></div>
+        {% endif %}
+
+        {% block footer %}
+            {{ function('wp_footer') }}
+        {% endblock %}
+
+        {% if vu_close_body_tag_content %}
+            {{ vu_close_body_tag_content }}
+        {% endif %}
+
+    </body>
+</html>
